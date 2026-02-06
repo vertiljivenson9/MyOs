@@ -1,10 +1,13 @@
-// errors.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// shared/errors.js
 
-console.log('errors.js cargado');
-
-function init() {
-    console.log('Aplicación inicializada');
-}
-
-module.exports = { init };
+// Errores comunes del sistema
+export const ERR_INVALID_JSON = "INVALID_JSON";
+export const ERR_COMMAND_NOT_FOUND = "COMMAND_NOT_FOUND";
+export const ERR_USER_NOT_FOUND = "USER_WALLET_NOT_FOUND";
+export const ERR_DEV_NOT_FOUND = "DEV_WALLET_NOT_FOUND";
+export const ERR_INSUFFICIENT_FUNDS = "INSUFFICIENT_FUNDS";
+export const ERR_WINDOW_NOT_FOUND = "WINDOW_NOT_FOUND";
+export const ERR_INVALID_OWNER = "INVALID_OWNER";
+export const ERR_UNKNOWN_ACTION = "UNKNOWN_ACTION";
+export const ERR_METHOD_NOT_ALLOWED = "METHOD_NOT_ALLOWED";
+export const ERR_INVALID_AMOUNT = "INVALID_AMOUNT";
