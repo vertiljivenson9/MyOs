@@ -1,19 +1,30 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index.html</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            line-height: 1.6;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>yOs Web OS</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      overflow: hidden;
+    }
+    #desktop {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
+    }
+  </style>
 </head>
 <body>
-    <h1>index.html</h1>
-    <p>Archivo creado automáticamente por PortalHub Creator v1.3</p>
+  <div id="desktop"></div>
+  <script type="module" src="./boot.js"></script>
 </body>
 </html>
