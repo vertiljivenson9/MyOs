@@ -1,17 +1,14 @@
 // workers/store/index.js
 import {
-  publishApp,
+  registerApp,
   listApps,
   getApp
-} from "./store.catalog.js";
+} from "./apps.registry.js";
 
 import {
-  installApp
-} from "./store.installer.js";
-
-import {
+  installApp,
   purchaseApp
-} from "./store.purchase.js";
+} from "./license.js";
 
 export default {
   async fetch(request) {
@@ -19,35 +16,19 @@ export default {
       return new Response("Method Not Allowed", { status: 405 });
     }
 
-    let payload;
-    try {
-      payload = await request.json();
-    } catch {
-      return Response.json(
-        { status: "error", error: "INVALID_JSON" },
-        { status: 400 }
-      );
-    }
-
-    const { action, data, user, app } = payload;
+    const { action, data, user, app } = await request.json();
 
     try {
       switch (action) {
-        case "store.publish":
-          publishApp(app, data);
+        case "store.register":
+          registerApp(app, data);
           return Response.json({ status: "ok" });
 
         case "store.list":
-          return Response.json({
-            status: "ok",
-            apps: listApps()
-          });
+          return Response.json({ status: "ok", apps: listApps() });
 
         case "store.get":
-          return Response.json({
-            status: "ok",
-            app: getApp(data.appId)
-          });
+          return Response.json({ status: "ok", app: getApp(data.appId) });
 
         case "store.install":
           installApp(user, data.appId);
