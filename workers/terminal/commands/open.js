@@ -1,10 +1,33 @@
-// open.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/terminal/commands/open.js
 
-console.log('open.js cargado');
+export default async function open(args, context) {
+  const target = args[0];
+  if (!target) {
+    throw new Error("OPEN_TARGET_REQUIRED");
+  }
 
-function init() {
-    console.log('Aplicación inicializada');
+  // Archivo
+  if (target.startsWith("/")) {
+    const res = await fetch(context.fsEndpoint, {
+      method: "POST",
+      body: JSON.stringify({
+        action: "fs.read",
+        data: { path: target },
+        app: context.app
+      })
+    });
+
+    const json = await res.json();
+    if (json.status !== "ok") {
+      throw new Error(json.error);
+    }
+
+    return json.content;
+  }
+
+  // App
+  return {
+    action: "window.open",
+    appId: target
+  };
 }
-
-module.exports = { init };
