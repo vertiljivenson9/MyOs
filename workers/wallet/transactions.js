@@ -1,10 +1,23 @@
-// transactions.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/wallet/transactions.js
 
-console.log('transactions.js cargado');
+const transactions = [];
 
-function init() {
-    console.log('Aplicación inicializada');
+/**
+ * Registra una transacción
+ */
+export function recordTransaction(tx) {
+  transactions.push({
+    id: crypto.randomUUID(),
+    ...tx,
+    createdAt: Date.now()
+  });
 }
 
-module.exports = { init };
+/**
+ * Lista transacciones por owner
+ */
+export function listTransactions(ownerId) {
+  return transactions.filter(
+    (t) => t.from === ownerId || t.to === ownerId
+  );
+}
