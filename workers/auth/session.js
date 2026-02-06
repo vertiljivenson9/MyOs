@@ -1,10 +1,42 @@
-// session.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/auth/session.js
+// Gestión simple de sesiones (memoria volátil)
 
-console.log('session.js cargado');
+const sessions = new Map();
 
-function init() {
-    console.log('Aplicación inicializada');
+/**
+ * Crea una sesión nueva para un usuario
+ * @param {string} userId
+ * @returns {Object}
+ */
+export function createSession(userId) {
+  const sessionId = crypto.randomUUID();
+  const createdAt = Date.now();
+
+  sessions.set(sessionId, {
+    userId,
+    createdAt
+  });
+
+  return {
+    sessionId,
+    userId,
+    createdAt
+  };
 }
 
-module.exports = { init };
+/**
+ * Valida si una sesión existe
+ * @param {string} sessionId
+ * @returns {boolean}
+ */
+export function validateSession(sessionId) {
+  return sessions.has(sessionId);
+}
+
+/**
+ * Obtiene una sesión completa
+ * (no se expone al exterior por ahora)
+ */
+export function getSession(sessionId) {
+  return sessions.get(sessionId) || null;
+}
