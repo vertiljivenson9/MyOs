@@ -1,11 +1,25 @@
 {
-  "name": "wallet.schema",
-  "version": "1.0.0",
-  "description": "Archivo creado automáticamente por PortalHub Creator v1.3",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "",
-  "license": "MIT"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "yOs Wallet",
+  "type": "object",
+  "required": ["ownerId", "balance", "transactions"],
+  "properties": {
+    "ownerId": {
+      "type": "string"
+    },
+    "balance": {
+      "type": "number",
+      "minimum": 0
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "$ref": "transaction.schema.json"
+      }
+    },
+    "type": {
+      "type": "string",
+      "enum": ["user", "developer"]
+    }
+  }
 }
