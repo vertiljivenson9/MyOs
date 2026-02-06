@@ -1,10 +1,25 @@
 // search.ui.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// Buscador en tiempo real
+export async function searchApps(query) {
+  if (!query || query.trim() === "") return [];
 
-console.log('search.ui.js cargado');
-
-function init() {
-    console.log('Aplicación inicializada');
+  const resp = await fetch("/workers/search", {
+    method: "POST",
+    body: JSON.stringify({
+      action: "search.query",
+      data: { query }
+    })
+  });
+  const json = await resp.json();
+  return json.results || [];
 }
 
-module.exports = { init };
+// Render simple de resultados en frontend
+export function renderSearchResults(results, container) {
+  container.innerHTML = "";
+  results.forEach(app => {
+    const div = document.createElement("div");
+    div.textContent = app.name + " - " + (app.price > 0 ? "$" + app.price : "Free");
+    container.appendChild(div);
+  });
+}
