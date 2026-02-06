@@ -1,11 +1,13 @@
 {
-  "name": "app",
+  "id": "file-manager",
+  "name": "File Manager",
   "version": "1.0.0",
-  "description": "Archivo creado automáticamente por PortalHub Creator v1.3",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "",
-  "license": "MIT"
+  "description": "Gestión de archivos en yOs",
+  "entry": "index.js",
+  "author": "swea gang",
+  "permissions": [
+    { "name": "filesystem" },
+    { "name": "window" }
+  ],
+  "price": 0
 }
