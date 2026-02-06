@@ -1,0 +1,11 @@
+{
+  "name": "app.schema",
+  "version": "1.0.0",
+  "description": "Archivo creado automáticamente por PortalHub Creator v1.3",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
