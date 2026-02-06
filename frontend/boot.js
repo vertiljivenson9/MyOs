@@ -1,10 +1,24 @@
 // boot.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// Inicializa el frontend de yOs
 
-console.log('boot.js cargado');
+import { renderDesktop, openDesktopWindow } from "./ui/desktop.js";
+import { updateTaskbar } from "./ui/taskbar.js";
 
-function init() {
-    console.log('Aplicación inicializada');
-}
+// Inicializar Desktop y Taskbar
+renderDesktop();
+updateTaskbar();
 
-module.exports = { init };
+// Abrir apps iniciales
+(async () => {
+  // Terminal
+  const termWin = await openDesktopWindow("terminal", "Terminal yOs");
+  
+  // File Manager
+  const fmWin = await openDesktopWindow("file-manager", "File Manager");
+
+  // Settings
+  const settingsWin = await openDesktopWindow("settings", "Settings");
+
+  // Store (si existe)
+  const storeWin = await openDesktopWindow("store", "yOs Store");
+})();
