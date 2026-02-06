@@ -1,11 +1,23 @@
 {
-  "name": "message.schema",
-  "version": "1.0.0",
-  "description": "Archivo creado automáticamente por PortalHub Creator v1.3",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "",
-  "license": "MIT"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "yOs Protocol Message",
+  "type": "object",
+  "required": ["source", "target", "action", "requestId"],
+  "properties": {
+    "source": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "requestId": {
+      "type": "string"
+    }
+  }
 }
