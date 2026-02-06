@@ -1,5 +1,24 @@
-# wrangler.toml
+name = "yos-webos"
+type = "javascript"
+main = "workers/kernel/index.js"
+compatibility_date = "2026-02-06"
+workers_dev = true
 
-Archivo creado automáticamente por PortalHub Creator v1.3.
+# Configuración KV para persistencia de datos
+kv_namespaces = [
+  { binding = "APPS_REGISTRY", id = "" },
+  { binding = "USER_WALLETS", id = "" },
+  { binding = "SETTINGS_FS", id = "" },
+  { binding = "TERMINAL_HISTORY", id = "" },
+  { binding = "FS_STORAGE", id = "" }
+]
 
-Este archivo fue generado automáticamente. Su contenido puede ser editado según sea necesario.
+# Configuración de rutas si quieres exponerlas (opcional)
+# routes = [
+#   { pattern = "yos.example.com/*", script = "yos-webos" }
+# ]
+
+# Opcional: build command si en algún momento usas bundler
+# [build]
+# command = "npm run build"
+# cwd = "./frontend"
