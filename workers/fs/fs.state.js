@@ -1,77 +1,127 @@
-// workers/fs/index.js
-import {
-  createFile,
-  readFile,
-  writeFile,
-  deleteFile,
-  listFiles
-} from "./fs.state.js";
+// workers/fs/fs.state.js
+// Sistema de archivos virtual (memoria volátil)
 
-import { canAccess } from "./fs.permissions.js";
+// Estructura base:
+// {
+//   "/": {
+//     type: "dir",
+//     children: {
+//       "file.txt": { type: "file", content: "..." }
+//     }
+//   }
+// }
 
-export default {
-  async fetch(request) {
-    if (request.method !== "POST") {
-      return new Response("Method Not Allowed", { status: 405 });
+const fsTree = {
+  "/": { type: "dir", children: {} }
+};
+
+/**
+ * Normaliza una ruta
+ */
+function normalizePath(path) {
+  if (!path || typeof path !== "string") {
+    throw new Error("INVALID_PATH");
+  }
+  if (!path.startsWith("/")) path = "/" + path;
+  return path.replace(/\/+/g, "/");
+}
+
+/**
+ * Obtiene el nodo padre y el nombre final
+ */
+function getParentNode(path) {
+  const parts = normalizePath(path).split("/").filter(Boolean);
+  let current = fsTree["/"];
+
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    const next = current.children[part];
+    if (!next || next.type !== "dir") {
+      throw new Error("PATH_NOT_FOUND");
     }
+    current = next;
+  }
 
-    let payload;
-    try {
-      payload = await request.json();
-    } catch {
-      return Response.json(
-        { status: "error", error: "INVALID_JSON" },
-        { status: 400 }
-      );
-    }
+  return {
+    parent: current,
+    name: parts[parts.length - 1]
+  };
+}
 
-    const { action, data, app } = payload;
+/**
+ * Crea un archivo
+ */
+export function createFile(path, content = "") {
+  const { parent, name } = getParentNode(path);
 
-    try {
-      // Verificación mínima de acceso
-      if (!canAccess(app, action)) {
-        return Response.json({
-          status: "denied",
-          error: "ACCESS_DENIED"
-        });
+  if (parent.children[name]) {
+    throw new Error("FILE_EXISTS");
+  }
+
+  parent.children[name] = {
+    type: "file",
+    content: String(content)
+  };
+}
+
+/**
+ * Lee un archivo
+ */
+export function readFile(path) {
+  const { parent, name } = getParentNode(path);
+  const node = parent.children[name];
+
+  if (!node || node.type !== "file") {
+    throw new Error("FILE_NOT_FOUND");
+  }
+
+  return node.content;
+}
+
+/**
+ * Escribe en un archivo existente
+ */
+export function writeFile(path, content) {
+  const { parent, name } = getParentNode(path);
+  const node = parent.children[name];
+
+  if (!node || node.type !== "file") {
+    throw new Error("FILE_NOT_FOUND");
+  }
+
+  node.content = String(content);
+}
+
+/**
+ * Elimina un archivo
+ */
+export function deleteFile(path) {
+  const { parent, name } = getParentNode(path);
+
+  if (!parent.children[name]) {
+    throw new Error("FILE_NOT_FOUND");
+  }
+
+  delete parent.children[name];
+}
+
+/**
+ * Lista archivos de un directorio
+ */
+export function listFiles(path = "/") {
+  const normalized = normalizePath(path);
+  let current = fsTree["/"];
+
+  if (normalized !== "/") {
+    const parts = normalized.split("/").filter(Boolean);
+    for (const part of parts) {
+      const next = current.children[part];
+      if (!next || next.type !== "dir") {
+        throw new Error("PATH_NOT_FOUND");
       }
-
-      switch (action) {
-        case "fs.create":
-          createFile(data.path, data.content || "");
-          return Response.json({ status: "ok" });
-
-        case "fs.read":
-          return Response.json({
-            status: "ok",
-            content: readFile(data.path)
-          });
-
-        case "fs.write":
-          writeFile(data.path, data.content);
-          return Response.json({ status: "ok" });
-
-        case "fs.delete":
-          deleteFile(data.path);
-          return Response.json({ status: "ok" });
-
-        case "fs.list":
-          return Response.json({
-            status: "ok",
-            files: listFiles(data.path)
-          });
-
-        default:
-          return Response.json(
-            { status: "error", error: "UNKNOWN_ACTION" },
-            { status: 400 }
-          );
-      }
-    } catch (err) {
-      return Response.json(
-        { status: "error", error: err.message },
-        { status: 400 }
-      );
+      current = next;
     }
   }
-};
+
+  return Object.keys(current.children);
+}
