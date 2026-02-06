@@ -1,10 +1,41 @@
 // index.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// Control de la aplicación File Manager
+import { renderUI } from "./ui.js";
 
-console.log('index.js cargado');
+// Función de inicialización
+export async function initFileManager(windowId) {
+  const container = document.createElement("div");
+  container.id = `file-manager-${windowId}`;
+  container.style.width = "100%";
+  container.style.height = "100%";
 
-function init() {
-    console.log('Aplicación inicializada');
+  renderUI(container);
+
+  return container;
 }
 
-module.exports = { init };
+// Función para listar archivos reales
+export async function listFiles(path = "/") {
+  const resp = await fetch("/workers/fs", {
+    method: "POST",
+    body: JSON.stringify({
+      action: "fs.list",
+      data: { path }
+    })
+  });
+  const json = await resp.json();
+  return json.files || [];
+}
+
+// Función para abrir archivo
+export async function openFile(filePath) {
+  const resp = await fetch("/workers/fs", {
+    method: "POST",
+    body: JSON.stringify({
+      action: "fs.read",
+      data: { path: filePath }
+    })
+  });
+  const json = await resp.json();
+  return json.content;
+}
