@@ -1,10 +1,21 @@
-// verification.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/auth/verification.js
+// Verificación básica de tokens
 
-console.log('verification.js cargado');
+/**
+ * Verifica un token simple
+ * En esta fase, el token es el sessionId
+ * @param {string} token
+ * @returns {Object}
+ */
+export function verifyToken(token) {
+  if (!token || typeof token !== "string") {
+    return { valid: false };
+  }
 
-function init() {
-    console.log('Aplicación inicializada');
+  // En v1 el token es opaco y solo valida forma
+  // La validación real se conecta luego a session / KV
+  return {
+    valid: true,
+    userId: null
+  };
 }
-
-module.exports = { init };
