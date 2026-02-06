@@ -1,10 +1,34 @@
-// dev.wallet.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/wallet/dev.wallet.js
 
-console.log('dev.wallet.js cargado');
+const devs = new Map();
 
-function init() {
-    console.log('Aplicación inicializada');
+/**
+ * Inicializa wallet del desarrollador
+ */
+export function initDevWallet(devId) {
+  if (!devId) throw new Error("INVALID_DEVELOPER");
+  if (!devs.has(devId)) {
+    devs.set(devId, {
+      balance: 0,
+      createdAt: Date.now()
+    });
+  }
 }
 
-module.exports = { init };
+/**
+ * Obtiene balance del dev
+ */
+export function getDevBalance(devId) {
+  const wallet = devs.get(devId);
+  if (!wallet) throw new Error("DEV_WALLET_NOT_FOUND");
+  return wallet.balance;
+}
+
+/**
+ * Acredita ingreso por venta
+ */
+export function creditDev(devId, amount) {
+  if (amount <= 0) throw new Error("INVALID_AMOUNT");
+  initDevWallet(devId);
+  devs.get(devId).balance += amount;
+}
