@@ -1,11 +1,31 @@
 {
-  "name": "transaction.schema",
-  "version": "1.0.0",
-  "description": "Archivo creado automáticamente por PortalHub Creator v1.3",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "",
-  "license": "MIT"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "yOs Transaction",
+  "type": "object",
+  "required": ["id", "from", "to", "amount", "type", "timestamp"],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "from": {
+      "type": "string"
+    },
+    "to": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "minimum": 0
+    },
+    "type": {
+      "type": "string",
+      "enum": ["purchase", "transfer", "withdraw"]
+    },
+    "timestamp": {
+      "type": "number"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
 }
