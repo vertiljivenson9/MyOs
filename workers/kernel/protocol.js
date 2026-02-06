@@ -1,10 +1,26 @@
-// protocol.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/kernel/protocol.js
 
-console.log('protocol.js cargado');
+export const MSG = Object.freeze({
+  // apps
+  REGISTER_APP: "kernel.app.register",
+  UNREGISTER_APP: "kernel.app.unregister",
+  GET_APPS: "kernel.app.list",
 
-function init() {
-    console.log('Aplicación inicializada');
-}
+  // lifecycle
+  SET_STATE: "kernel.app.set_state",
+  GET_STATE: "kernel.app.get_state",
 
-module.exports = { init };
+  // focus & multitasking
+  SET_FOCUS: "kernel.focus.set",
+  GET_FOCUS: "kernel.focus.get",
+
+  // system
+  PING: "kernel.system.ping"
+});
+
+export const APP_STATES = Object.freeze({
+  FOREGROUND: "foreground",
+  BACKGROUND: "background",
+  MINIMIZED: "minimized",
+  SUSPENDED: "suspended"
+});
