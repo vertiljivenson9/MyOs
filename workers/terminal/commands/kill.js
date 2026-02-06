@@ -1,10 +1,26 @@
-// kill.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/terminal/commands/kill.js
 
-console.log('kill.js cargado');
+export default async function kill(args, context) {
+  const pid = args[0];
 
-function init() {
-    console.log('Aplicación inicializada');
+  if (!pid) {
+    throw new Error("PID_REQUIRED");
+  }
+
+  const res = await fetch(context.kernelEndpoint, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "kernel.kill",
+      data: { pid },
+      app: context.app
+    })
+  });
+
+  const json = await res.json();
+
+  if (json.status !== "ok") {
+    throw new Error(json.error);
+  }
+
+  return `Process ${pid} terminated`;
 }
-
-module.exports = { init };
