@@ -1,11 +1,20 @@
 {
-  "name": "permission.schema",
-  "version": "1.0.0",
-  "description": "Archivo creado automáticamente por PortalHub Creator v1.3",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "author": "",
-  "license": "MIT"
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "yOs Permission",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": [
+        "filesystem",
+        "network",
+        "window",
+        "wallet.read"
+      ]
+    },
+    "scope": {
+      "type": "string"
+    }
+  }
 }
