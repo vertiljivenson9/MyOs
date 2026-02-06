@@ -1,10 +1,35 @@
-// index.js
-// Archivo creado automáticamente por PortalHub Creator v1.3
+// workers/terminal/index.js
+import { executeCommand } from "./executor.js";
 
-console.log('index.js cargado');
+export default {
+  async fetch(request) {
+    if (request.method !== "POST") {
+      return new Response("Method Not Allowed", { status: 405 });
+    }
 
-function init() {
-    console.log('Aplicación inicializada');
-}
+    let payload;
+    try {
+      payload = await request.json();
+    } catch {
+      return Response.json(
+        { status: "error", error: "INVALID_JSON" },
+        { status: 400 }
+      );
+    }
 
-module.exports = { init };
+    const { command, context } = payload;
+
+    try {
+      const result = await executeCommand(command, context || {});
+      return Response.json({
+        status: "ok",
+        output: result
+      });
+    } catch (err) {
+      return Response.json({
+        status: "error",
+        error: err.message
+      });
+    }
+  }
+};
